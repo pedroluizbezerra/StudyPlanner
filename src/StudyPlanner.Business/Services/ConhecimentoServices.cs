@@ -11,7 +11,8 @@ namespace StudyPlanner.Business.Services
     public class ConhecimentoServices : BaseServices, IConhecimentoServices
     {
         private readonly IConhecimentoRepository _conhecimentoRepository;
-        public ConhecimentoServices(IConhecimentoRepository conhecimentoRepository)
+        public ConhecimentoServices(IConhecimentoRepository conhecimentoRepository,
+            INotificador notificador) : base(notificador)
         {
             _conhecimentoRepository = conhecimentoRepository;
         }
@@ -28,7 +29,7 @@ namespace StudyPlanner.Business.Services
                 return;
             }
             await _conhecimentoRepository.Adicionar(conhecimento);
-
+            
         }
 
         public async Task Atualizar(Conhecimento conhecimento)
@@ -38,10 +39,13 @@ namespace StudyPlanner.Business.Services
                 //TODO Completar
                 return;
             }
-            else
-            {
-                return;
-            }
+
+            await _conhecimentoRepository.Atualizar(conhecimento);
+        }
+
+        public async Task Remover(Guid id)
+        {
+            await _conhecimentoRepository.Remover(id);
         }
 
         public Task<IEnumerable<Conhecimento>> BuscarPorFiltro()
@@ -58,10 +62,9 @@ namespace StudyPlanner.Business.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task Remover(int id)
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            _conhecimentoRepository?.Dispose();
         }
     }
 }

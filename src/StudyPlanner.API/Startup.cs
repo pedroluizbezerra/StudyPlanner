@@ -5,8 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StudyPlanner.Business.Interfaces;
+using StudyPlanner.Business.Notificacoes;
+using StudyPlanner.Business.Services;
 using StudyPlanner.Data.Context;
 using StudyPlanner.Data.Repository;
+
 
 namespace StudyPlanner.API
 {
@@ -29,6 +32,9 @@ namespace StudyPlanner.API
 
             services.AddScoped<StudyPlannerContext>();
             services.AddScoped<IConhecimentoRepository, ConhecimentoRepository>();
+            services.AddScoped<IConhecimentoServices, ConhecimentoServices>();
+            services.AddScoped<INotificador, Notificador>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

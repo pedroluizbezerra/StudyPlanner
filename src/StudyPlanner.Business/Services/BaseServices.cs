@@ -1,11 +1,19 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using StudyPlanner.Business.Interfaces;
 using StudyPlanner.Business.Models;
+using StudyPlanner.Business.Notificacoes;
 
 namespace StudyPlanner.Business.Services
 {
     public abstract class BaseServices
     {
+        private readonly INotificador _notificador;
+
+        public BaseServices(INotificador notificador)
+        {
+            _notificador = notificador;
+        }
 
         protected void Notificar(ValidationResult validationResult)
         {
@@ -15,9 +23,9 @@ namespace StudyPlanner.Business.Services
             }
         }
 
-        protected void Notificar(string message)
+        protected void Notificar(string mensagem)
         {
-            //propagar erro para a apresentação
+            _notificador.Handle(new Notificacao(mensagem));
         }
 
         protected bool ExecutarValidacao<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : Entity
