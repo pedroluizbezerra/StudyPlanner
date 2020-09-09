@@ -53,14 +53,14 @@ namespace StudyPlanner.Business.Services
             throw new NotImplementedException();
         }
 
-        public Task<Conhecimento> ObterPorId(Guid id)
+        public async Task<Conhecimento> ObterPorId(Guid id)
         {
-            throw new NotImplementedException();
+            return await _conhecimentoRepository.ObterPorId(id);
         }
 
-        public Task<List<Conhecimento>> ObterTodos()
+        public async Task<IList<Conhecimento>> ObterTodos()
         {
-            throw new NotImplementedException();
+            return await _conhecimentoRepository.ObterTodos();
         }
         public void Dispose()
         {

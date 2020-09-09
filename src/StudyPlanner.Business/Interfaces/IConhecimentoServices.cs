@@ -8,7 +8,7 @@ namespace StudyPlanner.Business.Interfaces
     public interface IConhecimentoServices : IDisposable
     {
         Task<Conhecimento> ObterPorId(Guid id);
-        Task<List<Conhecimento>> ObterTodos();
+        Task<IList<Conhecimento>> ObterTodos();
         Task<IEnumerable<Conhecimento>> BuscarPorFiltro(); //TODO Falta o filtro
         Task Adcionar(Conhecimento conhecimento);
         Task Atualizar(Conhecimento conhecimento);
