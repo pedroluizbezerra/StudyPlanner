@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudyPlanner.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,6 @@ namespace StudyPlanner.Data.Migrations
                     NivelConhecimentoAtual = table.Column<int>(nullable: false),
                     NivelConhecimentoDesejado = table.Column<int>(nullable: false),
                     Prioridade = table.Column<int>(nullable: false),
-                    TipoConhecimento = table.Column<int>(nullable: false),
                     PlanoAcao = table.Column<string>(type: "varchar(1000)", nullable: false)
                 },
                 constraints: table =>

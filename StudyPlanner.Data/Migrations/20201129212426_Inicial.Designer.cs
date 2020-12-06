@@ -10,8 +10,8 @@ using StudyPlanner.Data.Context;
 namespace StudyPlanner.Data.Migrations
 {
     [DbContext(typeof(StudyPlannerContext))]
-    [Migration("20200909012933_Initial")]
-    partial class Initial
+    [Migration("20201129212426_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,9 +42,6 @@ namespace StudyPlanner.Data.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<int>("Prioridade")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipoConhecimento")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

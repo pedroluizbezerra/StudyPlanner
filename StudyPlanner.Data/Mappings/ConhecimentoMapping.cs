@@ -25,9 +25,9 @@ namespace StudyPlanner.Data.Mappings
             builder.Property(c => c.Prioridade)
                 .IsRequired();
 
-            builder.Property(c => c.TipoConhecimento)
-                .HasConversion<int>()
-                .IsRequired();
+            //builder.Property(c => c.TipoConhecimento)
+            //    .HasConversion<string>()
+            //    .IsRequired();
 
             builder.Property(c => c.PlanoAcao)
                 .IsRequired()

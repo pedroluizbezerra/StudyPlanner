@@ -17,30 +17,31 @@ namespace StudyPlanner.Business.Services
             _conhecimentoRepository = conhecimentoRepository;
         }
 
-        public async Task Adcionar(Conhecimento conhecimento)
+        public async Task<bool> Adcionar(Conhecimento conhecimento)
         {
             if (!ExecutarValidacao(new ConhecimentoValidation(), conhecimento))
             {                
-                return;
+                return false;
             }
             if (_conhecimentoRepository.Buscar(c=> c.Nome == conhecimento.Nome).Result.Any()) //TODO Criar um método existe caso este esteja materializando o objeto
             {
                 Notificar("Já existe um conhecimento com o nome informado"); //TODO Criar resources de mensagem
-                return;
+                return false;
             }
             await _conhecimentoRepository.Adicionar(conhecimento);
-            
+            return true;
         }
 
-        public async Task Atualizar(Conhecimento conhecimento)
+        public async Task<bool> Atualizar(Conhecimento conhecimento)
         {
             if (!ExecutarValidacao(new ConhecimentoValidation(), conhecimento))
             {
                 //TODO Completar
-                return;
+                return false;
             }
 
             await _conhecimentoRepository.Atualizar(conhecimento);
+            return true;
         }
 
         public async Task Remover(Guid id)

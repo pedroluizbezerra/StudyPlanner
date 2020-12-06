@@ -10,8 +10,8 @@ namespace StudyPlanner.Business.Interfaces
         Task<Conhecimento> ObterPorId(Guid id);
         Task<IList<Conhecimento>> ObterTodos();
         Task<IEnumerable<Conhecimento>> BuscarPorFiltro(); //TODO Falta o filtro
-        Task Adcionar(Conhecimento conhecimento);
-        Task Atualizar(Conhecimento conhecimento);
+        Task<bool> Adcionar(Conhecimento conhecimento);
+        Task<bool> Atualizar(Conhecimento conhecimento);
         Task Remover(Guid id);
     }
 }

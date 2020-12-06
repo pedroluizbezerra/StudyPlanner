@@ -1,15 +1,14 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using StudyPlanner.Business.Interfaces;
-using StudyPlanner.Business.Notificacoes;
-using StudyPlanner.Business.Services;
+using StudyPlanner.API.Configuration;
 using StudyPlanner.Data.Context;
-using StudyPlanner.Data.Repository;
-
+using System.Text.Json.Serialization;
 
 namespace StudyPlanner.API
 {
@@ -25,16 +24,26 @@ namespace StudyPlanner.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
+
             services.AddDbContext<StudyPlannerContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("StudyPlannerContext")));
 
             services.AddControllers();
 
-            services.AddScoped<StudyPlannerContext>();
-            services.AddScoped<IConhecimentoRepository, ConhecimentoRepository>();
-            services.AddScoped<IConhecimentoServices, ConhecimentoServices>();
-            services.AddScoped<INotificador, Notificador>();
-            
+            services.ResolveDependencies();
+
+            services.Configure<ApiBehaviorOptions>(options => {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddAutoMapper(typeof(Startup));
+          
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

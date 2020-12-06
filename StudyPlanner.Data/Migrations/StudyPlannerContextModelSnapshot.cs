@@ -42,9 +42,6 @@ namespace StudyPlanner.Data.Migrations
                     b.Property<int>("Prioridade")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipoConhecimento")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Conhecimentos");

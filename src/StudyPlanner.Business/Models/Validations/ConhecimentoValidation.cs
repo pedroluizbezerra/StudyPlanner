@@ -31,8 +31,8 @@ namespace StudyPlanner.Business.Models.Validations
             RuleFor(c => c.Prioridade)
                 .NotEmpty().WithMessage(mensagemObrigatoriedade);
 
-            RuleFor(c => c.TipoConhecimento)
-                .NotEmpty().WithMessage(mensagemObrigatoriedade);
+            //RuleFor(c => c.TipoConhecimento)
+            //    .NotEmpty().WithMessage(mensagemObrigatoriedade);
         }
     }
 }
