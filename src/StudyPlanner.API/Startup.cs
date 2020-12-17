@@ -33,6 +33,8 @@ namespace StudyPlanner.API
             services.AddDbContext<StudyPlannerContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("StudyPlannerContext")));
 
+            services.AddIdentityConfiguration(Configuration);
+
             services.AddControllers();
 
             services.ResolveDependencies();
@@ -55,6 +57,8 @@ namespace StudyPlanner.API
             }
 
             //app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 

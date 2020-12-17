@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StudyPlanner.API.DTO;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace StudyPlanner.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ConhecimentoController : MainController
@@ -30,6 +32,7 @@ namespace StudyPlanner.API.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IList<ConhecimentoDTO>>> ObterTodos()
         {
@@ -74,7 +77,7 @@ namespace StudyPlanner.API.Controllers
 
             if  (id != conhecimentoDTO.Id)
             {
-                NotificarErro("O id informador não é o mesmo passado na query");
+                NotificarErro("O id informado não é o mesmo passado na query");
                 CustomResponse(conhecimentoDTO);
             }
                 
