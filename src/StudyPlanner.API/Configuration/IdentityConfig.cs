@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StudyPlanner.API.Data;
+using StudyPlanner.API.Extensions;
 
 namespace StudyPlanner.API.Configuration
 {
@@ -13,11 +14,20 @@ namespace StudyPlanner.API.Configuration
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
               configuration.GetConnectionString("StudyPlannerContext")));
+            
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            { 
+                options.User.RequireUniqueEmail = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddErrorDescriber<IdentityMensagensPortugues>()
+            .AddDefaultTokenProviders();
 
-            services.AddIdentityCore<IdentityUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+
+            //services.AddIdentityCore<IdentityUser>()
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
 
             return services;
         }
