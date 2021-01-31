@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StudyPlanner.API.Data;
 using StudyPlanner.API.Extensions;
+using System.Text;
 
 namespace StudyPlanner.API.Configuration
 {
@@ -22,6 +23,12 @@ namespace StudyPlanner.API.Configuration
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddErrorDescriber<IdentityMensagensPortugues>()
             .AddDefaultTokenProviders();
+
+            var appSettingSection = configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingSection);
+
+            var appSettings = appSettingSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
 
             //services.AddIdentityCore<IdentityUser>()
