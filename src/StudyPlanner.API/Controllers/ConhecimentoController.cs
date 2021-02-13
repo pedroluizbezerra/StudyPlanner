@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static StudyPlanner.API.Extensions.CustomAuthorize;
 
 namespace StudyPlanner.API.Controllers
 {
@@ -32,7 +33,6 @@ namespace StudyPlanner.API.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IList<ConhecimentoDTO>>> ObterTodos()
         {
@@ -57,7 +57,7 @@ namespace StudyPlanner.API.Controllers
             return Ok(conhecimentoDTO);
         }
 
-
+        [ClaimsAuthorize("Conhecimento","Adicionar")]
         [HttpPost]
         public async Task<ActionResult<ConhecimentoDTO>> Adicionar(ConhecimentoDTO conhecimentoDTO)
         {
@@ -72,6 +72,7 @@ namespace StudyPlanner.API.Controllers
 
         }
 
+        [ClaimsAuthorize("Conhecimento", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<ConhecimentoDTO>> Atualizar(Guid id, ConhecimentoDTO conhecimentoDTO){
 
@@ -88,8 +89,9 @@ namespace StudyPlanner.API.Controllers
                 _mapper.Map<Conhecimento>(conhecimentoDTO));
 
             return CustomResponse(conhecimentoDTO);
-        }    
+        }
 
+        [ClaimsAuthorize("Conhecimento", "Remover")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ConhecimentoDTO>> Remover(Guid id)
         {
