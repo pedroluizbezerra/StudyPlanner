@@ -26,7 +26,8 @@ namespace StudyPlanner.API.Controllers
         public ConhecimentoController(ILogger<ConhecimentoController> logger,
             IConhecimentoServices conhecimentoServices, 
             IMapper mapper,
-            INotificador notificador) : base(notificador)
+            INotificador notificador,
+            IUser user) : base(notificador, user)
         {
             _logger = logger;
             _conhecimentoServices = conhecimentoServices;
