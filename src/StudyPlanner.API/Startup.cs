@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using StudyPlanner.API.Configuration;
 using StudyPlanner.Data.Context;
 using System.Text.Json.Serialization;
@@ -44,7 +45,22 @@ namespace StudyPlanner.API
             });
 
             services.AddAutoMapper(typeof(Startup));
-          
+
+            services.AddCors(options => {
+                
+                options.AddPolicy("Development",
+                    builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+
+                options.AddPolicy("Production",
+                    builder => builder
+                    .WithOrigins("http://desenvolvedor.io")
+                    .WithMethods("GET")
+                    .AllowAnyHeader());
+            });
 
         }
 
@@ -53,10 +69,15 @@ namespace StudyPlanner.API
         {
             if (env.IsDevelopment())
             {
+                app.UseCors("Development");
                 app.UseDeveloperExceptionPage();
+            } else
+            {
+                app.UseCors("Production");
+                app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
 

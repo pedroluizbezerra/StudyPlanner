@@ -34,6 +34,7 @@ namespace StudyPlanner.API.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IList<ConhecimentoDTO>>> ObterTodos()
         {
