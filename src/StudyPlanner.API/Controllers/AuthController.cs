@@ -14,6 +14,7 @@ using System.Linq;
 
 namespace StudyPlanner.API.Controllers
 {
+
     [Route("api")]
     public class AuthController : MainController
     {

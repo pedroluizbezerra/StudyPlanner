@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 using StudyPlanner.API.Configuration;
 using StudyPlanner.Data.Context;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace StudyPlanner.API
@@ -26,10 +26,11 @@ namespace StudyPlanner.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
-                .AddJsonOptions(options => {
+                .AddJsonOptions(options =>
+                {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
-            });
+                });
 
             services.AddDbContext<StudyPlannerContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("StudyPlannerContext")));
@@ -40,28 +41,26 @@ namespace StudyPlanner.API
 
             services.ResolveDependencies();
 
-            services.Configure<ApiBehaviorOptions>(options => {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
                 options.SuppressModelStateInvalidFilter = true;
             });
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddCors(options => {
-                
+            services.AddCors(options =>
+            {
+
                 options.AddPolicy("Development",
                     builder => builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-
-                options.AddPolicy("Production",
-                    builder => builder
-                    .WithOrigins("http://desenvolvedor.io")
-                    .WithMethods("GET")
                     .AllowAnyHeader());
             });
 
+            services.AddSwaggerGen();
+
+            services.ResolveDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,13 +70,14 @@ namespace StudyPlanner.API
             {
                 app.UseCors("Development");
                 app.UseDeveloperExceptionPage();
-            } else
+            }
+            else
             {
                 app.UseCors("Production");
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthentication();
 
@@ -89,6 +89,12 @@ namespace StudyPlanner.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+           {
+               c.SwaggerEndpoint("/swagger/v1/swagger.json", "Study Planner V1");
+           });
         }
     }
 }

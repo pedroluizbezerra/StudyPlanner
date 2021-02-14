@@ -14,7 +14,6 @@ using static StudyPlanner.API.Extensions.CustomAuthorize;
 namespace StudyPlanner.API.Controllers
 {
     [Authorize]
-    [ApiController]
     [Route("api/[controller]")]
     public class ConhecimentoController : MainController
     {
