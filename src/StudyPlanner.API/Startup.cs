@@ -1,5 +1,7 @@
 using AutoMapper;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StudyPlanner.API.Configuration;
+using StudyPlanner.API.Extensions;
 using StudyPlanner.Data.Context;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -60,6 +63,11 @@ namespace StudyPlanner.API
 
             services.AddSwaggerGen();
 
+            services.AddHealthChecks().AddSqlServer(
+                Configuration.GetConnectionString("StudyPlannerContext"), name: "BancoSQL");
+
+            services.AddHealthChecksUI();
+            
             services.ResolveDependencies();
         }
 
@@ -81,6 +89,8 @@ namespace StudyPlanner.API
 
             app.UseAuthentication();
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -95,6 +105,21 @@ namespace StudyPlanner.API
            {
                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Study Planner V1");
            });
+
+            app.UseHealthChecks("/api/hc", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecksUI(options =>
+            {                
+                options.UIPath = "/api/hc-ui";
+                options.ApiPath = "/super-api";
+                options.UseRelativeApiPath = false;
+                options.UseRelativeResourcesPath = false;
+                options.UseRelativeWebhookPath = false;
+            });       
         }
     }
 }

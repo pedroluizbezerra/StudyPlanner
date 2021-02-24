@@ -11,6 +11,7 @@ using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace StudyPlanner.API.Controllers
 {
@@ -21,16 +22,18 @@ namespace StudyPlanner.API.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public AuthController(INotificador notificador, 
             SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
             IOptions<AppSettings> appSettings,
-            IUser user) : base(notificador, user)
+            IUser user, ILogger<AuthController> logger) : base(notificador, user)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost("nova-conta")]
@@ -69,6 +72,7 @@ namespace StudyPlanner.API.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation("Login com sucesso: " + loginUser.Email);
                 return CustomResponse(await GerarJwt(loginUser.Email));
             }
             if (result.IsLockedOut)
